@@ -23,3 +23,6 @@ app.get("*", function(req, res) {
 http.listen(app.get("port"), function() {
 	console.log("Node app started on port %s", app.get("port"));
 });
+
+//var nombres = prompt("Cual es tu nombre?");
+//var username = prompt("What is your name?");

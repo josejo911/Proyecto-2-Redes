@@ -2,19 +2,27 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>CardFu!</title>
+		<title>PokeBatalla!</title>
 		<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-		<link rel="shortcut icon" type="image/png" href="/images/cardfu_favicon.png"/>
 		<meta name=viewport content="width=device-width, initial-scale=1">
 	</head>
 
 	<body>
 		<div id="content">
 			<canvas id="game-canvas" class="center-block" width="0" height="0"></canvas>
-
-			<div class="play-guide">
-				
+			
+			<div class="chat">
+					<h3>CHAT</h3>
+					<label><input type="text" style="color:black" id="mensaje" size="60" />
+						<button onclick="envio()" style="color:black" id = "envio">Enviar</button></label>
+					
+					<div class="chatbox">
+						<label><p id="respuesta"></p></label>
+						
+							
+						
+					</div>
 			</div>
 		</div>
 
@@ -33,6 +41,5 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="javascripts/game_client.js" type="text/javascript"></script>
 		<script src="javascripts/canvas.js" type="text/javascript"></script>
-		<script src="javascripts/konami.js" type="text/javascript"></script>
 	</body>
 </html>

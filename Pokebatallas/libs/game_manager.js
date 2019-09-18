@@ -1,17 +1,22 @@
-// This file handles all socket.io connections and manages the serverside game logic.
+// Este archivo maneja las conexiones de socket.io y manega la logica del server.
 
 var socketio = require("socket.io");
-
+//var nombres = require("../public/");
 var players = [];
 var queue = [];
 var matches = [];
 var rematchRequests = [];
 
-var powers = [21, 20, 19, 18,17,16,15,14,13,12,11,10,9,8, 7, 6, 5, 4, 3, 2];
+var powers = [21, 20, 19, 18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2];
 var colors = ["yellow", "orange", "green", "blue", "red", "purple"];
 
 var logFull = false;
 var timerDuration = 15;
+//import {nombres} from './canvas.js'
+//var prompt = require('../node_modules/prompts/dist/elements/prompt');
+//var palabra = prompt("Cual es tu nombrecito?");
+//var nombres = require('../server');
+
 
 updateTimers();
 
@@ -19,12 +24,25 @@ updateTimers();
 module.exports.listen = function(app) {
 	io = socketio.listen(app);
 	io.on("connection", function(socket) {
+		console.log('usuario conectado!!!');
+		
+		//console.log(nombres);
+		//var username = prompt("What is your name?");
+		//socket.emit('entrance', {message: 'Welcome to the chat room!'}); 
+		//socket.emit('entrance', {message: 'Your ID is #' + socket.id}); 
+		//socket.emit('request', /* */);
+		//var nombres = require('../public/javascripts/canvas');
+		
 		players.push({
 			socket: socket,
-			deck: undefined
+			deck: undefined,
+			//nombre: username
 		});
+		//socket.id = "pedro"
+		//console.log(socket.id);
 
 		socket.on("disconnect", function() {
+			console.log('usuario desconectado!!!');
 			playerDisconnected(socket);
 		});
 
@@ -81,9 +99,11 @@ function enterQueue(socket) {
 	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
 	var player = findPlayerById(socket.id);
 	if (queue.indexOf(player) === -1) {
+		//le meto un jugador
 		queue.push(player);
 		socket.emit("queue entered");
 		if (queue.length >= 2) {
+			//saco 2 jugadores de la cola
 			createMatch([queue.shift(), queue.shift()]);
 		}
 	}
@@ -101,7 +121,7 @@ function leaveQueue(socket) {
 
 function createMatch(participants) {
 	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
-	var id = createId();
+	var id = createId();//#######les creo un id a cada jugador###################
 	var match = {
 		matchId: id,
 		players: [],
@@ -121,6 +141,11 @@ function createMatch(participants) {
 				[]
 			]
 		};
+		//export {playerObject};
+		//############################################################
+		//####################################################
+		//playerObject = addname(playerObject);
+		//console.log(playerObject);
 		dealInitialCards(playerObject);
 		match.players.push(playerObject);
 		participants[i].socket.emit("update cards", playerObject.cards);
@@ -130,11 +155,16 @@ function createMatch(participants) {
 	io.to(id).emit("enter match");
 	match.timerActive = true;
 }
+//function addname(playerObject) {
+//	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
+//	playerObject = addnombre(playerObject);
+//}
+
 
 function createId() {
 	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
 	var id = "";
-	var charset = "ABCDEFGHIJKLMNOPQRSTUCWXYZabcdefghijklmnopqrtsuvwxyz1234567890";
+	var charset = "A";
 	for (var i = 0; i < 16; i++) {
 		id += charset.charAt(Math.floor(Math.random() * charset.length));
 	}
@@ -149,6 +179,7 @@ function dealInitialCards(playerObject) {
 }
 
 function drawCard(deck) {
+	//var username = window.prompt("What is your name?");
 	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
 	return deck.shift();
 }
@@ -214,16 +245,14 @@ function fightCards(match) {
 		// If the the powers are equal, it's a tie. Pass the player with the higest power as winner.
 		processRound(match, c0.power === c1.power, match.players[c0.power > c1.power ? 0 : 1]);
 	} else {
-		// Using modulus we can find the player with the winning type.
-		// Our types are represented by numbers: Rock = 0, Paper = 1, Scissors = 2
-		// We don't have to worry about ties, so a table of outcomes would look like this:
+		// Utilizamos la logica de piedra papel o tijera en nuestro caso tipo hierba, planta, fuego
+		// Usando modulos encontramos al tipo ganador
 
 		// | Types  _0_|_1_|_2_|
 		// |   0   |   | 1 | 0 |
 		// |   1   | 0 |   | 1 |
 		// |   2   | 1 | 0 |   |
 
-		// Since we have an array of players, we can use the outcome as the index to get the winner.
 		processRound(match, false, match.players[(2 + c0.type - c1.type) % 3]);
 	}
 }

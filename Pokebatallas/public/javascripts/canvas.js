@@ -1,6 +1,5 @@
 // This file manages the game's logic for most visual things and contains various functions
 // for drawing on and manipulating the canvas, used by the game client.
-
 //////////  Constructors  \\\\\\\\\\
 function Label(position, text, size, visible, clickable, disabled, font, callback) {
 	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
@@ -15,12 +14,46 @@ this.position = position;
 	this.font = font;
 	this.callback = callback;
 }
+var jugadores = [];
+//import {playerObject} from '../../libs/game_manager'
+var nombres = prompt("Cual es tu nombre?");//####################
+//var nombres = require('./game_client');
+//import nombres from './game_client'
 
+//export {nombres};
+//var usuarios = String.toUpperCase(usuario);
+var bienvenida = ("Entrenador " + nombres.toUpperCase());
+//console.log(playerObject);
+
+
+jugadores.push(nombres);
+//var username = prompt(jugadores);
+//player2 = jugadores.slice(0,1);
+//console.log(player1);
+//var versus = (player1 +" + "+player2);
 //////////  Canvas  \\\\\\\\\\
+mensajes = [];
+function envio() {
+	var x = document.getElementById("mensaje").value;
+	mensajito = nombres+": " + x;
+	mensajes.push(mensajito);
+	document.getElementById("mensaje").value = "";
+	//labels["mensaje"] = new Label({x: 0.5, y: 0.5}, mensajes, 80, false, false, false, "PokemonHollow");
+	var w = "";
+	w = mensajes;
+	//w = w.replace(",","<br>");
+	alert(mensajes);
+	//document.getElementById("respuesta").innerHTML = w;
+}
+
 function init() {
 	if (logFull) console.log("%s(%j)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
 	canvas = document.getElementById("game-canvas");
 	ctx = canvas.getContext("2d");
+
+	//canvas2 = document.getElementById("game-canvas2");
+	//ctx2 = canvas2.getContext("2d");
+
 	handleResize();
 	handSlots = [];
 	for (var i = 1; i < 6; i++) {
@@ -32,6 +65,7 @@ function init() {
 			card: undefined
 		});
 	}
+
 	labels["logo"] = new Label({x: 0.5, y: 0.3}, "Poke Batalla!!", 192, true, false, false, "PokemonHollow");
 	labels["play"] = new Label({x: 0.5, y: 0.7}, "Luchar!", 144, true, true, false, "PokemonHollow", enterQueue);
 	labels["searching"] = new Label({x: 0.5, y: 0.7}, "Buscando", 100, false, false, false, "PokemonHollow");
@@ -40,6 +74,21 @@ function init() {
 	labels["waiting"] = new Label({x: 0.5, y: 0.62}, "Esperando", 128, false, false, false, "PokemonHollow");
 	labels["main menu"] = new Label({x: 0.5, y: 0.78}, "Menu", 128, false, false, false, "PokemonHollow", exitMatch);
 	labels["timer"] = new Label({x: 0.5, y: 0.1}, 20, 64, false, false, false, "PokemonHollow");
+	labels["nombre"] = new Label({x: 0.2, y: 0.05}, bienvenida, 80, true, false, false, "PokemonHollow");
+	//labels["vs"] = new Label({x: 0.2, y: 0.5}, "holaaaaaaaaaaa", 80, true, false, false, "PokemonHollow");
+
+	labels["jugador"] = new Label({x: 0.2, y: 0.05}, nombres, 80, false, false, false, "PokemonHollow");
+	labels["vs"] = new Label({x: 0.5, y: 0.5}, "hola", 80, false, false, false, "PokemonHollow");
+	labels["chat"] = new Label({x: 0.5, y: 0.5}, "hola", 80, false, false, false, "PokemonHollow");
+	
+	//nombrecito = new string(nombres);
+	//#####################label vrs#################################
+	
+	//labels["vs"] = new Label({x: 0.5, y: 1.2}, "versus", 80, true, false, false, "PokemonHollow");
+	
+	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 }
 
 function animate() {
@@ -166,7 +215,12 @@ function handleResize() {
 
 //////////  Drawing  \\\\\\\\\\
 function draw() {
+	
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	//ctx2.fillRect(10, 10, 1000000, 10000000);
+	//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	//drawChat();
+	///%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	for (var i = 0; i < handSlots.length; i++) {
 		if (displayCardSlots) {
 			if (handSlots[i].card) {
@@ -178,6 +232,7 @@ function draw() {
 	}
 	drawPoints();
 	if (playerCard) {
+		//console.log(playerCard);
 		drawCard(playerCard, playerCardPosition, 1.5);
 	}
 	if (opponentCard) {
@@ -192,6 +247,18 @@ function draw() {
 			drawLabel(labels[i]);
 		}
 	}
+}
+
+//function drawChat(){
+//	ctx.fillStyle = "#ffffff";
+//	ctx.fillRect(canvas.width/2, canvas.height/2, canvas.width/3, canvas.height/3);
+
+//}
+
+function addnombre(playerObject){
+	playerObject["nombrecito"] = nombres;
+	return playerObject;
+
 }
 
 function drawCard(card, position, scale) {
@@ -263,7 +330,7 @@ function drawEmptySlot(slot) {
 	ctx.strokeStyle = "#000000";
 	ctx.strokeRect(slot.position.x, slot.position.y, cardWidth, cardHeight);
 }
-
+///cartas de los puntos%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function drawPoints() {
 	for (var i = 0; i < playerPoints.length; i++) {
 		for (var j = playerPoints[i].length - 1; j >= 0; j--) {

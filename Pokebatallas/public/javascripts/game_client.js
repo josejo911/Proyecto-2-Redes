@@ -1,16 +1,28 @@
-// This file manages the games client's logic. It's here that Socket.io connections are handled
-// and functions from canvas.js are used to manage the game's visual appearance.
-
+// Este archivo maneja la logica del cliente. Se maneja las conexiones de socket.io,
+//ademas de que manjeamos las funciones del canvas
+//var nombres = prompt("Ingresa tu nombre");
+//export {nombres};
 var socket = io();
 var canPlayCard = false;
 var logFull = false;
 var playerPoints = [],
 	opponentPoints = [];
 var opponentCard, playerCard, matchWinner, matchEndReason, readyToEnd, timerInterval;
+//const jugadores = []
+//console.log("nombrecito");
+//socket.name = (labels["jugador"].text);
+//leo = socket.name;
 
 //////////  Socket Events  \\\\\\\\\\
+//console.log("como estas");
 socket.on("enter match", function() {
 	enterMatch();
+	
+	
+	//var algo = prompt(socket.id);
+	//socket.name = (labels["jugador"].text);
+	//jugadores.push(socket.name)
+	
 });
 
 socket.on("update cards", function(cards) {
@@ -54,6 +66,7 @@ function enterQueue() {
 
 function enterMatch() {
 	if (logFull) console.log("%s(%s)", arguments.callee.name, Array.prototype.slice.call(arguments).sort());
+	//jugadores.push(labels["jugador"].text);
 	playerPoints = [];
 	opponentPoints = [];
 	labels["result"].visible = false;
@@ -65,12 +78,18 @@ function enterMatch() {
 	labels["waiting"].visible = false;
 	labels["timer"].text = 15;
 	labels["timer"].visible = true;
+	labels["vs"].text = ( " vs " );
+	labels["vs"].visible = true;
 	timerInterval = setInterval(updateTimer, 1000);
 	resetDots(labels["waiting"]);
 	labels["searching"].visible = false;
 	resetDots(labels["searching"]);
 	labels["logo"].visible = false;
+	labels["nombre"].visible = false;
+	labels["vs"].visible = true;
 	displayCardSlots = true;
+	socket.write("empieza partida");
+	//console.log(nombrecito);
 }
 
 function updateCards(cards) {
@@ -144,12 +163,15 @@ function endMatch() {
 		labels["rematch"].clickable = true;
 	}
 
-	labels["result"].text = ["You Lose!", "You Win!"][+(socket.id === matchWinner)];
+	labels["result"].text = ["Perdiste!", "Ganaste!"][+(socket.id === matchWinner)];
 	labels["result"].visible = true;
 	labels["rematch"].visible = true;
 	labels["main menu"].visible = true;
 	labels["main menu"].clickable = true;
 	labels["timer"].visible = false;
+	labels["vs"].visible = false;
+	//labels["vs"].text = "hola";
+	//labels["vs"].visible = false;
 	labels["timer"].text = 15;
 	clearInterval(timerInterval);
 	matchWinner = undefined;
@@ -172,6 +194,8 @@ function exitMatch() {
 	labels["play"].visible = true;
 	labels["play"].clickable = true;
 	labels["logo"].visible = true;
+	labels["vs"].visible = true;
+	labels["nombre"].visible = true;
 }
 
 function requestRematch() {

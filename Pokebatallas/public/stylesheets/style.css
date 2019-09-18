@@ -1,25 +1,45 @@
+body {
+    background: url("../images/back.jpg");
+    background-color: #d60000;
+    background-size: cover;
+}
+
+.label{
+    margin-top: 1vh;
+    background-color: #ffffff;
+    width: 100vh;
+    height: 100vh;
+
+}
+
 canvas {
-    border: 1px solid black;
+    border: 5px solid white;
     background-color: #d60000;
     background: url("../images/Menu.png");
     background-size: cover;
-	margin-top: 1vh;
-      z-index: 0;
-      
+    margin-top: 15vh;
+      z-index: 0;    
 }
 
-.play-guide {
-	margin: 5%;
-}
 
-@font-face {
-    font-family: "ChineseTakeaway";
-    src: url("../fonts/ChineseTakeaway.ttf");
+.chat {
+    margin: 5%;
+    color: #ffffff;
+    text-align: center;
+    border: 1px solid white;
+    background-color: #df5252;
+    height: 100ph;
+    
 }
-
-@font-face {
-    font-family: "RagingRedLotusBB";
-    src: url("../fonts/RagingRedLotusBB.ttf");
+.chatbox {
+    margin: 5%;
+    text-align: left;
+    border: 1px solid black;
+    background-color: #f7e6e6;
+    color: #000000;
+    height: 50vh;
+    overflow-y : scroll;
+    
 }
 
 @font-face {
